@@ -2,10 +2,10 @@ import React from 'react';
 import {ScrollView, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import _ from 'lodash';
 import styles from "../../styles";
-import Meal from "./meal";
+import Meal from "./Meal";
 
 const placeHolder = '>Meal';
-const headerText = 'Meal Planner';
+const headerText = 'Meal Tracker';
 
 export default class Main extends React.Component {
     constructor(props) {
@@ -14,14 +14,16 @@ export default class Main extends React.Component {
             mealArray: [],
             mealText: '',
         }
+
+        this.addButton = this.addNote.bind(this);
     }
 
     render() {
 
         let meals = this.state.mealArray.map((val, key) => {
             return <Meal key={key}
-                         currentMeal={key}
-                         val={val}
+                         keyVal={key}
+                         meal={val}
                          deleteMethod={() => this.deleteMeal(key)}/>
         });
 
@@ -44,7 +46,7 @@ export default class Main extends React.Component {
                                underlineColorAndroid={'transparent'}>
                     </TextInput>
 
-                    <TouchableOpacity onPress={this.addNote.bind(this)} style={styles.addButton}>
+                    <TouchableOpacity onPress={this.addButton} style={styles.addButton}>
                         <Text style={styles.addButtonText}>
                             +
                         </Text>
@@ -55,10 +57,10 @@ export default class Main extends React.Component {
     }
 
     addNote() {
-        if(!_.isEmpty(this.state.mealText) )
+        if(!_.isEmpty(this.state.mealText))
         {
-            var d = new Date();
-            var meals = this.state.mealArray;
+            const d = new Date();
+            const meals = this.state.mealArray;
             meals.push({
                 date: d.getFullYear() +
                     '/' + (d.getMonth() + 1) +
@@ -66,6 +68,7 @@ export default class Main extends React.Component {
                 meal: this.state.mealText
                 });
             this.setState({mealArray: meals});
+            //Clears input box, for next input
             this.setState({mealText: ''});
         }
     }
